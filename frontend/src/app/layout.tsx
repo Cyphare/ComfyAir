@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { ComfortProvider } from "@/components/ComfortProvider";
+import Taskbar from "@/components/Taskbar";
 import "./globals.css";
 
 // Headlines: Fraunces with the SOFT and optical-size axes (variable font, no weight list).
@@ -27,7 +29,10 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ComfyAir · Suhu AC yang pas sepanjang malam",
+  title: {
+    default: "ComfyAir · Suhu AC yang pas sepanjang malam",
+    template: "%s",
+  },
   description:
     "ComfyAir membaca cuaca di luar, menyarankan setpoint AC, mengatur kurva suhu tidur, dan menghitung perkiraan hemat listrik dalam Rupiah. Tanpa alat tambahan.",
 };
@@ -44,7 +49,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       data-scroll-behavior="smooth"
       className={`${display.variable} ${text.variable} ${mono.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <ComfortProvider>
+          <Taskbar />
+          {children}
+        </ComfortProvider>
+      </body>
     </html>
   );
 }

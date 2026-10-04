@@ -1,36 +1,5 @@
-.masthead {
-  padding-top: clamp(14px, 2.4vw, 30px);
-}
-
-.top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 14px 40px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--rule);
-}
-
-.wordmark {
-  font-family: var(--face-display);
-  font-size: 2.75rem;
-  font-weight: 600;
-  font-variation-settings: "SOFT" 100;
-  font-optical-sizing: auto;
-  line-height: 0.9;
-  letter-spacing: -0.025em;
-}
-
-.motto {
-  margin-top: 8px;
-  font-family: var(--face-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
-  color: var(--ink-2);
-}
-
-/* The "ear": dateline and the live reading, like the weather box beside a nameplate. */
+/* The "ear": dateline and the live reading, like the weather box beside a
+   nameplate. Shared by MastheadLive, used inside the Taskbar top row. */
 .ear {
   font-family: var(--face-mono);
   font-size: 0.75rem;
@@ -57,59 +26,8 @@
   vertical-align: 0.05em;
 }
 
-.bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px 24px;
-  padding-block: 8px;
-  border-bottom: 4px double var(--ink);
-}
-
-.nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 22px;
-  list-style: none;
-}
-
-.nav a {
-  display: inline-block;
-  padding-block: 6px;
-  font-family: var(--face-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.nav a:hover {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.3em;
-}
-
-.edition {
-  font-family: var(--face-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-}
-
 @media (max-width: 599px) {
   .ear {
     text-align: left;
-  }
-
-  .edition {
-    display: none;
-  }
-
-  .wordmark {
-    font-size: 2.4rem;
   }
 }
