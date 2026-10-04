@@ -116,21 +116,38 @@ export type MonthlyBill = {
   savedRp: number;
 };
 
-export function monthlyBill(savingsPct: number): MonthlyBill {
-  // 192 kWh x Rp1.444,70 = Rp277.382,40 per month at 20 C.
-  const baselineCost = BASELINE_KWH * ENERGY.tariffPerKwh;
+/**
+ * Energy bill for a given number of nights. `nights` defaults to the 30-night
+ * month, so existing callers (the Presentasi receipt) keep their exact numbers.
+ * The dashboard passes 1 / 7 / 30. One consistent rule: cost = kWh x tariff,
+ * round the baseline and optimized lines, then subtract so the printed total
+ * always adds up.
+ */
+export function monthlyBill(savingsPct: number, nights: number = ENERGY.nightsPerMonth): MonthlyBill {
+  const kwh = ENERGY.acPowerKw * ENERGY.hoursPerNight * nights;
+  // 192 kWh x Rp1.444,70 = Rp277.382,40 for the 30-night month at 20 C.
+  const baselineCost = kwh * ENERGY.tariffPerKwh;
   const optimizedCost = baselineCost * (1 - savingsPct / 100);
   const baselineRp = Math.round(baselineCost);
   const optimizedRp = Math.round(optimizedCost);
   return {
-    baselineKwh: BASELINE_KWH,
-    optimizedKwh: BASELINE_KWH * (1 - savingsPct / 100),
+    baselineKwh: kwh,
+    optimizedKwh: kwh * (1 - savingsPct / 100),
     baselineRp,
     optimizedRp,
     // Subtract the rounded lines so the printed receipt always adds up.
     savedRp: baselineRp - optimizedRp,
   };
 }
+
+/** The three periods the dashboard savings panel can show. */
+export const PERIODS = [
+  { id: "daily", label: "Harian", nights: 1 },
+  { id: "weekly", label: "Mingguan", nights: 7 },
+  { id: "monthly", label: "Bulanan", nights: 30 },
+] as const;
+
+export type PeriodId = (typeof PERIODS)[number]["id"];
 
 // Decimal formatting only. `style: "currency"` inserts spacing characters that
 // differ between ICU versions (Node prerender vs. the visitor's browser).

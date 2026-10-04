@@ -1,23 +1,12 @@
-import { ComfortProvider } from "@/components/ComfortProvider";
-import Masthead from "@/components/Masthead";
-import ComfortExperience from "@/components/ComfortExperience";
-import SleepCurve from "@/components/SleepCurve";
-import HowItWorks from "@/components/HowItWorks";
-import Colophon from "@/components/Colophon";
+import type { Metadata } from "next";
+import Dashboard from "@/components/Dashboard";
+
+export const metadata: Metadata = {
+  title: "ComfyAir · Dasbor",
+  description:
+    "Dasbor ComfyAir: setpoint AC malam ini, cuaca luar, kurva tidur, dan perkiraan hemat listrik dalam satu lembar.",
+};
 
 export default function Home() {
-  return (
-    <ComfortProvider>
-      <a className="skip-link" href="#simulasi">
-        Langsung ke simulasi
-      </a>
-      <Masthead />
-      <main id="isi">
-        <ComfortExperience />
-        <SleepCurve />
-        <HowItWorks />
-      </main>
-      <Colophon />
-    </ComfortProvider>
-  );
+  return <Dashboard />;
 }

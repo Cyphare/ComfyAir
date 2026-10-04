@@ -10,11 +10,17 @@ import {
   snapHumidity,
   type Mode,
 } from "@/lib/comfort";
-import { fetchCurrentWeather } from "@/lib/weather";
+import { fetchWeatherSnapshot, type HourlyPoint } from "@/lib/weather";
 
 export type WeatherState =
   | { status: "loading" }
-  | { status: "live"; temp: number; humidity: number; observedAt: string }
+  | {
+      status: "live";
+      temp: number;
+      humidity: number;
+      observedAt: string;
+      hourly: HourlyPoint[];
+    }
   | { status: "sample" };
 
 export type Controls = {
@@ -29,7 +35,7 @@ export type Controls = {
 export type ComfortState = { weather: WeatherState; controls: Controls };
 
 export type ComfortAction =
-  | { type: "weather/live"; temp: number; humidity: number; observedAt: string }
+  | { type: "weather/live"; temp: number; humidity: number; observedAt: string; hourly: HourlyPoint[] }
   | { type: "weather/sample" }
   | { type: "temp/step"; delta: 1 | -1 }
   | { type: "humidity/step"; delta: 5 | -5 }
@@ -61,6 +67,7 @@ function reducer(state: ComfortState, action: ComfortAction): ComfortState {
         temp: action.temp,
         humidity: action.humidity,
         observedAt: action.observedAt,
+        hourly: action.hourly,
       };
       if (controls.touched) return { ...state, weather };
       return {
@@ -111,7 +118,7 @@ export function ComfortProvider({ children }: { children: ReactNode }) {
   // Live weather once per visit. Runs only in the browser, never at build time.
   useEffect(() => {
     const controller = new AbortController();
-    fetchCurrentWeather(controller.signal)
+    fetchWeatherSnapshot(controller.signal)
       .then((weather) => dispatch({ type: "weather/live", ...weather }))
       .catch(() => {
         if (!controller.signal.aborted) dispatch({ type: "weather/sample" });
